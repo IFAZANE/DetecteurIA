@@ -1,0 +1,96 @@
+import streamlit as st
+import fitz  # PyMuPDF pour lire les PDF
+import matplotlib.pyplot as plt
+
+
+# ------------------------
+# Fonction d'extraction du texte
+# ------------------------
+def extract_text_from_pdf(pdf_file):
+    text = ""
+    with fitz.open(stream=pdf_file.read(), filetype="pdf") as doc:
+        for page in doc:
+            text += page.get_text()
+    return text
+
+
+# ------------------------
+# Fonction de détection simulée (à remplacer par un vrai modèle si besoin)
+# ------------------------
+def detect_ai_generated_text(text):
+    # 🔶 Simule une prédiction IA (à remplacer avec un vrai modèle)
+    # Ici on retourne des scores arbitraires juste pour la démo
+    import random
+    ai_score = random.uniform(0, 1)
+    human_score = 1 - ai_score
+    return ai_score, human_score
+
+
+# ------------------------
+# Interface utilisateur
+# ------------------------
+
+st.set_page_config(page_title="Détecteur IA PDF", page_icon="🤖", layout="wide")
+st.title("📄🧠 Détecteur de texte généré par l'IA")
+
+# Upload de fichier PDF
+uploaded_file = st.sidebar.file_uploader("📤 Téléversez un fichier PDF", type="pdf")
+
+# ------------------------
+# Si aucun fichier : afficher l'image d'accueil
+# ------------------------
+if not uploaded_file:
+    st.image("assets/image.png", use_container_width=True)
+    st.markdown("""
+    ### Bienvenue dans l'application de détection IA 🧠📄  
+    Cette application vous permet d'analyser un document PDF pour détecter s'il a été rédigé par une Intelligence Artificielle comme ChatGPT.  
+    👉 Commencez par téléverser un fichier PDF via le menu latéral.
+
+    **🔍 Utilisation typique :**
+    - Vérification de rapports étudiants
+    - Détection de contenu IA dans les articles
+    - Analyse automatisée de documents
+
+    ---
+    """)
+
+# ------------------------
+# Si un fichier est uploadé : traitement
+# ------------------------
+if uploaded_file:
+    st.success("✅ Fichier chargé avec succès.")
+
+    with st.spinner("📚 Extraction du texte..."):
+        text = extract_text_from_pdf(uploaded_file)
+
+    if not text.strip():
+        st.error("❌ Aucun texte détecté.")
+    else:
+        with st.spinner("🤖 Analyse du contenu..."):
+            ai_score, human_score = detect_ai_generated_text(text)
+
+        # Résultat de l’analyse
+        st.subheader("🧾 Résultat de l'analyse")
+        st.metric("Probabilité IA", f"{ai_score * 100:.2f} %")
+
+        # Camembert / Donut Chart
+        fig, ax = plt.subplots()
+        ax.pie([ai_score, human_score], labels=['IA', 'Humain'], autopct='%1.1f%%',
+               colors=['#ff4b4b', '#1f77b4'], startangle=90, wedgeprops=dict(width=0.4))
+        ax.set_title("Degré de génération IA")
+        st.pyplot(fig)
+
+        # Badge de risque
+        st.subheader("🎯 Degré de génération IA")
+        if ai_score >= 0.8:
+            st.markdown("### 🔴 Très Élevé : Très probablement généré par une IA (≥ 80%)")
+        elif ai_score >= 0.5:
+            st.markdown("### 🟡 Élevé : Probablement généré par une IA (50–80%)")
+        elif ai_score >= 0.15:
+            st.markdown("### 🔵 Modéré : Peut contenir des éléments IA (15–50%)")
+        else:
+            st.markdown("### 🟢 Faible : Très probablement rédigé par un humain (< 15%)")
+
+        # Affichage du texte analysé
+        with st.expander("📝 Aperçu du texte analysé"):
+            st.text_area("Contenu (extrait)", text[:2000], height=300)
