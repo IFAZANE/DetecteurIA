@@ -1,8 +1,9 @@
 streamlit
+fitz
 pdfplumber
 transformers
 torch
 matplotlib
 numpy
 pandas
-fitz
+
