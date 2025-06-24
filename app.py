@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import fitz  # PyMuPDF pour lire les PDF
 import matplotlib.pyplot as plt
@@ -39,8 +40,10 @@ uploaded_file = st.sidebar.file_uploader("📤 Téléversez un fichier PDF", typ
 # ------------------------
 # Si aucun fichier : afficher l'image d'accueil
 # ------------------------
+
 if not uploaded_file:
-    st.image("assets/image.png", use_container_width=True)
+    image_path = os.path.join("assets", "image.png")
+    st.image(image_path, use_container_width=True)
     st.markdown("""
     ### Bienvenue dans l'application de détection IA 🧠📄  
     Cette application vous permet d'analyser un document PDF pour détecter s'il a été rédigé par une Intelligence Artificielle comme ChatGPT.  
