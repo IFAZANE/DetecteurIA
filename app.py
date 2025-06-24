@@ -42,7 +42,7 @@ uploaded_file = st.sidebar.file_uploader("📤 Téléversez un fichier PDF", typ
 # ------------------------
 
 if not uploaded_file:
-    image_path = os.path.join("assets", "image.png")
+    image_path = os.path.join("image.png")
     st.image(image_path, use_container_width=True)
     st.markdown("""
     ### Bienvenue dans l'application de détection IA 🧠📄  
