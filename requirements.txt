@@ -1,6 +1,7 @@
 streamlit
-transformers
-pymupdf
 matplotlib
+pymupdf
+transformers
+torch
 pandas
 numpy
