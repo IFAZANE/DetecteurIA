@@ -1,4 +1,5 @@
 streamlit
+transformers
 pymupdf
 matplotlib
 pandas
