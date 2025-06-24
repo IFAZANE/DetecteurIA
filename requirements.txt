@@ -3,3 +3,5 @@ pdfplumber
 transformers
 torch
 matplotlib
+numpy
+pandas
