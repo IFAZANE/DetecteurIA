@@ -1,9 +1,5 @@
 streamlit
-fitz
-pdfplumber
-transformers
-torch
+pymupdf
 matplotlib
-numpy
 pandas
-
+numpy
