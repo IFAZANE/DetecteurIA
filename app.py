@@ -83,11 +83,13 @@ if uploaded_file:
         # Badge de risque
         st.subheader("🎯 Degré de génération IA")
         if ai_score >= 0.8:
-            st.markdown("### 🔴 Très Élevé : Très probablement généré par une IA (≥ 80%)")
+            st.markdown("### 🔴 Très Très Élevé : Généré par une IA (≥ 80%)")
         elif ai_score >= 0.5:
-            st.markdown("### 🟡 Élevé : Probablement généré par une IA (50–80%)")
+            st.markdown("### 🟡 Très Élevé : Très probablement généré par une IA (50–80%)")
+        elif ai_score >= 0.3:
+            st.markdown("### 🟡 Élevé : Probablement généré par une IA (30–50%)")
         elif ai_score >= 0.15:
-            st.markdown("### 🔵 Modéré : Peut contenir des éléments IA (15–50%)")
+            st.markdown("### 🔵 Modéré : Peut contenir des éléments IA (15–30%)")
         else:
             st.markdown("### 🟢 Faible : Très probablement rédigé par un humain (< 15%)")
 
