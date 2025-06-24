@@ -1,8 +1,7 @@
 import os
 import streamlit as st
-import fitz  # PyMuPDF pour lire les PDF
+import fitz  # PyMuPDF
 import matplotlib.pyplot as plt
-
 
 # ------------------------
 # Fonction d'extraction du texte
@@ -14,36 +13,34 @@ def extract_text_from_pdf(pdf_file):
             text += page.get_text()
     return text
 
-
 # ------------------------
-# Fonction de détection simulée (à remplacer par un vrai modèle si besoin)
+# Fonction de détection simulée
 # ------------------------
 def detect_ai_generated_text(text):
-    # 🔶 Simule une prédiction IA (à remplacer avec un vrai modèle)
-    # Ici on retourne des scores arbitraires juste pour la démo
     import random
     ai_score = random.uniform(0, 1)
     human_score = 1 - ai_score
     return ai_score, human_score
 
-
 # ------------------------
 # Interface utilisateur
 # ------------------------
-
 st.set_page_config(page_title="Détecteur IA PDF", page_icon="🤖", layout="wide")
 st.title("📄🧠 Détecteur de texte généré par l'IA")
 
-# Upload de fichier PDF
 uploaded_file = st.sidebar.file_uploader("📤 Téléversez un fichier PDF", type="pdf")
 
 # ------------------------
 # Si aucun fichier : afficher l'image d'accueil
 # ------------------------
-
 if not uploaded_file:
-    image_path = os.path.join("assets", "image.png")
-    st.image(image_path, use_container_width=True)
+    image_path = os.path.join("assets", "image.png")  # Assure-toi que le fichier est dans /assets
+
+    if os.path.exists(image_path):
+        st.image(image_path, use_container_width=True)
+    else:
+        st.warning(f"⚠️ Image non trouvée : `{image_path}`")
+
     st.markdown("""
     ### Bienvenue dans l'application de détection IA 🧠📄  
     Cette application vous permet d'analyser un document PDF pour détecter s'il a été rédigé par une Intelligence Artificielle comme ChatGPT.  
@@ -76,7 +73,7 @@ if uploaded_file:
         st.subheader("🧾 Résultat de l'analyse")
         st.metric("Probabilité IA", f"{ai_score * 100:.2f} %")
 
-        # Camembert / Donut Chart
+        # Graphique en camembert
         fig, ax = plt.subplots()
         ax.pie([ai_score, human_score], labels=['IA', 'Humain'], autopct='%1.1f%%',
                colors=['#ff4b4b', '#1f77b4'], startangle=90, wedgeprops=dict(width=0.4))
@@ -94,6 +91,6 @@ if uploaded_file:
         else:
             st.markdown("### 🟢 Faible : Très probablement rédigé par un humain (< 15%)")
 
-        # Affichage du texte analysé
+        # Affichage du texte extrait
         with st.expander("📝 Aperçu du texte analysé"):
             st.text_area("Contenu (extrait)", text[:2000], height=300)
